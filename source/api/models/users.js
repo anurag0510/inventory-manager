@@ -13,4 +13,21 @@ const usersSchema = new Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
+/*
+ * Statics
+ */
+usersSchema.statics = {
+  async createUser(userInfo) {
+    const result = await this.create({
+      user_name: userInfo.user_name,
+      first_name: userInfo.first_name,
+      last_name: userInfo.last_name,
+      roles: userInfo.roles,
+      is_active: true,
+      is_archieved: false,
+    });
+    return result;
+  },
+};
+
 module.exports = mongoose.model("users", usersSchema);

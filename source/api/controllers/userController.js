@@ -25,7 +25,7 @@ class UserController {
       if (!payloadValidation.error) {
         const result = await UserService.createUser(payload);
         log.info(JSON.stringify(result));
-        response.json({ success: true, data: result });
+        response.status(201).json({ success: true, data: result });
       } else {
         response.status(400).json({
           status: 400,

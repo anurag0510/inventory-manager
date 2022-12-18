@@ -20,6 +20,16 @@ class UserValidation {
     let result = await schema.validate(payload);
     return result;
   }
+
+  async validateUpdateUserData(payload) {
+    const schema = Joi.object({
+      first_name: userParamKeys.first_name,
+      last_name: userParamKeys.last_name,
+      roles: userParamKeys.roles,
+    }).options({ abortEarly: false });
+    let result = await schema.validate(payload);
+    return result;
+  }
 }
 
 module.exports = new UserValidation();

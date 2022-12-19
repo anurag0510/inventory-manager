@@ -13,4 +13,47 @@ const usersSchema = new Schema({
   updated_at: { type: Date, default: Date.now },
 });
 
+/*
+ * Pre-middleware
+ */
+usersSchema.pre(["find", "findOneAndUpdate"], function () {
+  this.select(Object.keys(usersSchema.tree));
+});
+
+/*
+ * Statics
+ */
+usersSchema.statics = {
+  async createUser(userInfo) {
+    const result = await this.create({
+      user_name: userInfo.user_name,
+      first_name: userInfo.first_name,
+      last_name: userInfo.last_name,
+      roles: userInfo.roles,
+      is_active: true,
+      is_archieved: false,
+    });
+    return result;
+  },
+
+  async updateUser(userInfo, filter, options) {
+    let updateData = () => {
+      let data = {};
+      if (userInfo.hasOwnProperty("first_name"))
+        data["first_name"] = userInfo["first_name"];
+      if (userInfo.hasOwnProperty("last_name"))
+        data["last_name"] = userInfo["last_name"];
+      if (userInfo.hasOwnProperty("roles")) data["roles"] = userInfo["roles"];
+      data["updated_at"] = Date.now();
+      return data;
+    };
+    const result = await this.findOneAndUpdate(
+      filter,
+      { $set: updateData() },
+      options
+    );
+    return result;
+  },
+};
+
 module.exports = mongoose.model("users", usersSchema);

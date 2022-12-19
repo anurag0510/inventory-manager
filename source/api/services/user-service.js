@@ -19,12 +19,35 @@ class UserService {
   }
 
   async createUser(userDetails) {
-    let result = await (await userDal.createUser(userDetails)).toObject();
-    result["id"] = result["_id"];
-    delete result["_id"];
-    delete result["__v"];
-    log.info(result);
-    return result;
+    try {
+      let result = await (await userDal.createUser(userDetails)).toObject();
+      return await this.rearrangedReturnData(result);
+    } catch (ex) {
+      log.warn(ex);
+      throw ex;
+    }
+  }
+
+  async updateUser(key, value, userDetails) {
+    let filter = key === "id" ? { _id: value } : { user_name: value };
+    let options = { upsert: false, returnOriginal: false };
+    try {
+      let result = await (
+        await userDal.updateUser(userDetails, filter, options)
+      ).toObject();
+      return await this.rearrangedReturnData(result);
+    } catch (ex) {
+      log.warn(ex);
+      throw ex;
+    }
+  }
+
+  async rearrangedReturnData(data) {
+    data["id"] = data["_id"];
+    delete data["_id"];
+    delete data["__v"];
+    log.info(data);
+    return data;
   }
 }
 

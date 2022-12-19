@@ -39,6 +39,34 @@ class UserController {
       response.status(500).json({ message: ex });
     }
   }
+
+  async _updateUser(request, response) {
+    let payload = request.body;
+    payload.key = request.params.key;
+    try {
+      const payloadValidation = await UserValidation.validateUpdateUserData(
+        payload
+      );
+      if (!payloadValidation.error) {
+        const result = await UserService.updateUser(
+          request.params.key,
+          request.params.value,
+          payload
+        );
+        log.info(JSON.stringify(result));
+        response.status(200).json({ success: true, data: result });
+      } else {
+        response.status(400).json({
+          status: 400,
+          message: payloadValidation.error.details.map((value) => {
+            return value.message;
+          }),
+        });
+      }
+    } catch (ex) {
+      response.status(500).json({ message: ex.message });
+    }
+  }
 }
 
 module.exports = new UserController();

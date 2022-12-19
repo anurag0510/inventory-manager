@@ -7,6 +7,7 @@ const userParamKeys = {
   roles: Joi.array().items(
     Joi.string().valid("ADMIN", "TECH_SUPPORT", "LEAD", "CUSTOMER", "SELLER")
   ),
+  key: Joi.string().valid("user_name", "id"),
 };
 
 class UserValidation {
@@ -26,6 +27,7 @@ class UserValidation {
       first_name: userParamKeys.first_name,
       last_name: userParamKeys.last_name,
       roles: userParamKeys.roles,
+      key: userParamKeys.key.required(),
     }).options({ abortEarly: false });
     let result = await schema.validate(payload);
     return result;

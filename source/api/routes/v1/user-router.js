@@ -37,4 +37,21 @@ router
     userController._createUser(request, response);
   });
 
+router
+  /**
+   * @api {post} api/user Create User
+   * @apiDescription Update user and return updated user object to client
+   * @apiVersion 1.0.0
+   * @apiName Update User
+   * @apiGroup User
+   * @apiPermission ADMIN
+   *
+   * @apiSuccess {Object} Updated User Object to return
+   *
+   * @apiError (Unauthorized 401)  Unauthorized  Only authenticated users can access the data
+   */
+  .put("/:key(user_name|id)/:value", (request, response) => {
+    userController._updateUser(request, response);
+  });
+
 module.exports = router;

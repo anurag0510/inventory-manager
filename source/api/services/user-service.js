@@ -1,5 +1,3 @@
-const { HttpStatusError } = require("common-errors");
-
 const log = require("../../config/logger");
 const userDal = require("../dal/userDal");
 

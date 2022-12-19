@@ -8,5 +8,10 @@ const router = express.Router();
  * API Routes
  */
 router.use(routesV1);
+router.use("*", (request, response) => {
+  response
+    .status(404)
+    .json({ message: `No such route '${request.url}' to respond.` });
+});
 
 module.exports = router;

@@ -67,6 +67,19 @@ class UserController {
       response.status(500).json({ message: ex.message });
     }
   }
+
+  async _deleteUser(request, response) {
+    try {
+      const result = await UserService.deleteUser(
+        request.params.key,
+        request.params.value
+      );
+      log.info(JSON.stringify(result));
+      response.status(200).json({ success: true, data: result });
+    } catch (ex) {
+      response.status(500).json({ message: ex.message });
+    }
+  }
 }
 
 module.exports = new UserController();

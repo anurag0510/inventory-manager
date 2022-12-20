@@ -54,6 +54,21 @@ usersSchema.statics = {
     );
     return result;
   },
+
+  async deleteUser(filter, options) {
+    let updateData = () => {
+      let data = {};
+      data["is_active"] = false;
+      data["updated_at"] = Date.now();
+      return data;
+    };
+    const result = await this.findOneAndUpdate(
+      filter,
+      { $set: updateData() },
+      options
+    );
+    return result;
+  },
 };
 
 module.exports = mongoose.model("users", usersSchema);

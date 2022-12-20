@@ -1,5 +1,3 @@
-const { HttpStatusError } = require("common-errors");
-
 const Users = require("../models/users");
 
 class UserDal {
@@ -15,6 +13,14 @@ class UserDal {
 
   async updateUser(userInfo, filter, options) {
     let result = await Users.updateUser(userInfo, filter, options);
+    if (result == null) {
+      throw new Error("filter failed to match the criteria");
+    }
+    return result;
+  }
+
+  async deleteUser(filter, options) {
+    let result = await Users.deleteUser(filter, options);
     if (result == null) {
       throw new Error("filter failed to match the criteria");
     }

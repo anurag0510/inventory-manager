@@ -1,5 +1,3 @@
-const { HttpStatusError } = require("common-errors");
-
 const log = require("../../config/logger");
 const userDal = require("../dal/userDal");
 
@@ -35,6 +33,18 @@ class UserService {
       let result = await (
         await userDal.updateUser(userDetails, filter, options)
       ).toObject();
+      return await this.rearrangedReturnData(result);
+    } catch (ex) {
+      log.warn(ex);
+      throw ex;
+    }
+  }
+
+  async deleteUser(key, value) {
+    let filter = key === "id" ? { _id: value } : { user_name: value };
+    let options = { upsert: false, returnOriginal: false };
+    try {
+      let result = await (await userDal.deleteUser(filter, options)).toObject();
       return await this.rearrangedReturnData(result);
     } catch (ex) {
       log.warn(ex);

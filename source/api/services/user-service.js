@@ -40,6 +40,18 @@ class UserService {
     }
   }
 
+  async deleteUser(key, value) {
+    let filter = key === "id" ? { _id: value } : { user_name: value };
+    let options = { upsert: false, returnOriginal: false };
+    try {
+      let result = await (await userDal.deleteUser(filter, options)).toObject();
+      return await this.rearrangedReturnData(result);
+    } catch (ex) {
+      log.warn(ex);
+      throw ex;
+    }
+  }
+
   async rearrangedReturnData(data) {
     data["id"] = data["_id"];
     delete data["_id"];

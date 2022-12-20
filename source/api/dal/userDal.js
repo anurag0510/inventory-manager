@@ -18,6 +18,14 @@ class UserDal {
     }
     return result;
   }
+
+  async deleteUser(filter, options) {
+    let result = await Users.deleteUser(filter, options);
+    if (result == null) {
+      throw new Error("filter failed to match the criteria");
+    }
+    return result;
+  }
 }
 
 module.exports = new UserDal();
